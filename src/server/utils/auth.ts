@@ -2,6 +2,7 @@ import { type GetServerSidePropsContext } from "next";
 import { getServerSession,  type NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google"
 import GitHubProvider from "next-auth/providers/github"
+import EmailProvider from "next-auth/providers/email"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { PrismaClient } from "@prisma/client"
 import { env } from "~/env.mjs";
@@ -22,17 +23,22 @@ export const authOptions: NextAuthOptions = {
     GitHubProvider({
       clientId: env.GITHUB_ID,
       clientSecret: env.GITHUB_SECRET 
-    })
-    /**
-     * ...add more providers here.
-     *
-     * Most other providers require a bit more work than the Discord provider. For example, the
-     * GitHub provider requires you to add the `refresh_token_expires_in` field to the Account
-     * model. Refer to the NextAuth.js docs for the provider you want to use. Example:
-     *
-     * @see https://next-auth.js.org/providers/github
-     */
+    }),
+    EmailProvider({
+      server: {
+        host: env.EMAIL_SERVER_HOST,
+        port: Number(env.EMAIL_SERVER_PORT),
+        auth: {
+          user: env.EMAIL_SERVER_USER,
+          pass: env.EMAIL_SERVER_PASSWORD
+        }
+      },
+      from: env.EMAIL_FROM
+    }),
   ],
+  /* pages: {
+    signIn: '/auth/singin'
+  } */
 };
 
 /**
