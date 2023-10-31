@@ -5,7 +5,7 @@ import GitHubProvider from "next-auth/providers/github"
 import EmailProvider from "next-auth/providers/email"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { PrismaClient } from "@prisma/client"
-import { env } from "~/env.mjs";
+import { env } from "@env";
 
 const prisma = new PrismaClient();
 /**
